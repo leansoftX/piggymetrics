@@ -13,12 +13,13 @@ services:
   config:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-config
     restart: always
     logging:
       options:
         max-size: "10m"
         max-file: "10"
+
+
 
   registry:
     environment:
@@ -35,10 +36,11 @@ services:
         max-size: "10m"
         max-file: "10"
 
+
+
   gateway:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-gateway
     restart: always
     depends_on:
       config:
@@ -50,6 +52,16 @@ services:
         max-size: "10m"
         max-file: "10"
 
+
+  trace:
+    image: openzipkin/zipkin
+    restart: always
+    depends_on:
+      config:
+        condition: service_healthy
+    ports:
+      - 9411:9411
+
   auth-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
@@ -57,7 +69,6 @@ services:
       STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
       ACCOUNT_SERVICE_PASSWORD: $ACCOUNT_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-auth-service
     restart: always
     depends_on:
       config:
@@ -82,7 +93,6 @@ services:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
       ACCOUNT_SERVICE_PASSWORD: $ACCOUNT_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-account-service
     restart: always
     depends_on:
       config:
@@ -108,7 +118,6 @@ services:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
       STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-statistics-service
     restart: always
     depends_on:
       config:
@@ -133,7 +142,6 @@ services:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
       NOTIFICATION_SERVICE_PASSWORD: $NOTIFICATION_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-notification-service
     restart: always
     depends_on:
       config:
@@ -162,7 +170,7 @@ services:
       config:
         condition: service_healthy
     ports:
-      - 9000:8080
+      - 9000:9000
     logging:
       options:
         max-size: "10m"
