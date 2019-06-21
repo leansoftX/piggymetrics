@@ -256,7 +256,7 @@ Just copy `docker-compose.yml` and hit `docker-compose up`
 #### Development mode
 If you'd like to build images yourself (with some changes in the code, for example), you have to clone all repository and build artifacts with maven. Then, run `docker-compose -f docker-compose.base.yml -f docker-compose.dev.yml up`
 
-`docker-compose.dev.yml` inherits `docker-compose.yml` with additional possibility to build images locally and expose all containers ports for convenient development.
+`docker-compose.dev.yml` inherits `docker-compose.base.yml` with additional possibility to build images locally and expose all containers ports for convenient development.
 
 #### Important endpoints
 - http://localhost:80 - Gateway
